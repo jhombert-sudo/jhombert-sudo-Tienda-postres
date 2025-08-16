@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tienda de Postres</title>
+  <meta name="description" content="Tienda de postres estáticos para GitHub Pages. Búsqueda, filtros y carrito con WhatsApp." />
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#121a2b;
+      --muted:#a7b2c7;
+      --accent:#7dd3fc;
+      --accent-2:#38bdf8;
+      --white:#f8fafc;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+      background:linear-gradient(180deg,#0b1220 0%,#0e1627 60%,#0b1220 100%);
+      color:var(--white);
+      min-height:100svh;
+    }
+    header{
+      position:sticky; top:0; z-index:10; backdrop-filter:saturate(1.2) blur(8px);
+      background:rgba(11,18,32,.7); border-bottom:1px solid rgba(125,211,252,.2)
+    }
+    .wrap{max-width:1100px; margin:auto; padding:18px}
+    .brand{display:flex; align-items:center; gap:12px}
+    .logo{width:40px; height:40px; border-radius:12px; display:grid; place-items:center; background:
+      radial-gradient(120px 80px at 30% 20%,#38bdf8,transparent),
+      radial-gradient(120px 80px at 70% 80%,#7dd3fc,transparent);
+      box-shadow:0 6px 30px rgba(125,211,252,.25)}
+    h1{font-size:clamp(20px,3vw,28px); margin:0}
+
+    .toolbar{display:grid; grid-template-columns:1fr auto auto; gap:12px; margin-top:14px}
+    .search{display:flex; align-items:center; gap:10px; background:var(--card); border:1px solid rgba(125,211,252,.2); border-radius:14px; padding:10px 12px}
+    .search input{flex:1; background:transparent; border:0; outline:0; color:var(--white); font-size:16px}
+
+    .filters{display:flex; gap:8px; flex-wrap:wrap}
+    .btn{border:1px solid rgba(125,211,252,.25); background:var(--card); color:var(--white); padding:10px 12px; border-radius:12px; cursor:pointer}
+    .btn:hover{border-color:var(--accent)}
+    .btn.active{background:linear-gradient(135deg,rgba(56,189,248,.18),rgba(125,211,252,.08)); border-color:var(--accent-2)}
+    .sort{background:var(--card)}
+
+    main{padding:26px 18px}
+    .grid{--min:240px; display:grid; grid-template-columns:repeat(auto-fill,minmax(var(--min),1fr)); gap:16px; max-width:1100px; margin:auto}
+    .card{background:var(--card); border:1px solid rgba(125,211,252,.12); border-radius:16px; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 10px 30px rgba(0,0,0,.25)}
+    .card picture{display:block; aspect-ratio:16/11; background:#0b1220; overflow:hidden}
+    .card img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .5s ease}
+    .card:hover img{transform:scale(1.06)}
+    .card .body{padding:14px}
+    .title{font-size:18px; margin:0 0 6px}
+    .meta{display:flex; justify-content:space-between; align-items:center; color:var(--muted); font-size:14px}
+    .price{color:var(--accent-2); font-weight:700}
+    .tags{margin-top:8px; display:flex; gap:6px; flex-wrap:wrap}
+    .chip{font-size:12px; padding:4px 8px; border:1px solid rgba(125,211,252,.25); border-radius:999px; color:var(--muted)}
+    .actions{display:flex; gap:8px; margin-top:12px}
+    .actions .btn{flex:1}
+    .actions .btn.add{background:linear-gradient(135deg,rgba(56,189,248,.22),rgba(125,211,252,.1)); border-color:var(--accent-2)}
+    .actions .btn.add:hover{transform:translateY(-1px)}
+
+    .cart{position:fixed; right:18px; bottom:18px; display:flex; gap:10px; align-items:center; background:linear-gradient(135deg,rgba(56,189,248,.22),rgba(125,211,252,.1)); border:1px solid rgba(125,211,252,.4); padding:10px 14px; border-radius:16px; box-shadow:0 10px 30px rgba(0,0,0,.35)}
+    .cart small{color:var(--muted)}
+    .cart .count{font-weight:700; color:var(--accent-2)}
+    .wa{background:transparent; border:1px solid rgba(56,178,80,.8); color:var(--white); padding:10px 12px; border-radius:12px; cursor:pointer}
+    .wa:hover{background:rgba(56,178,80,.12)}
+
+    footer{border-top:1px solid rgba(125,211,252,.18); margin-top:30px}
+    footer .wrap{display:flex; flex-direction:column; gap:8px}
+    footer a{color:var(--accent)}
+
+    .empty{grid-column:1/-1; text-align:center; color:var(--muted); padding:30px; border:1px dashed rgba(125,211,252,.25); border-radius:16px}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="brand">
+        <div class="logo" aria-hidden>🍰</div>
+        <h1>Postres Deliciosos</h1>
+      </div>
+      <div class="toolbar">
+        <label class="search" aria-label="Buscar postres">
+          🔎 <input id="q" type="search" placeholder="Buscar (ej.: cheesecake, helado, pastel)…" />
+        </label>
+        <div class="filters" role="group" aria-label="Filtros de categoría">
+          <button class="btn active" data-cat="all">Todos</button>
+          <button class="btn" data-cat="tortas">Tortas</button>
+          <button class="btn" data-cat="helados">Helados</button>
+          <button class="btn" data-cat="pasteleria">Pastelería</button>
+        </div>
+        <select id="sort" class="btn sort" aria-label="Ordenar">
+          <option value="reco">Ordenar: Recomendados</option>
+          <option value="asc">Precio: menor a mayor</option>
+          <option value="desc">Precio: mayor a menor</option>
+          <option value="az">Nombre A→Z</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="grid" id="grid" aria-live="polite"></section>
+  </main>
+
+  <div class="cart" aria-live="polite">
+    <small><span class="count" id="cartCount">0</span> en el carrito</small>
+    <button class="wa" id="waBtn">Enviar pedido por WhatsApp</button>
+  </div>
+
+  <footer>
+    <div class="wrap">
+      <small>Imágenes servidas desde Unsplash. Cambiá las URLs cuando quieras tus propias fotos.</small>
+      <small>Hecho para GitHub Pages: subí este <code>index.html</code> y activá Pages. 💙</small>
+    </div>
+  </footer>
+
+  <script>
+  // ——— Catálogo ———
+  // Imágenes: https://source.unsplash.com/{ID}
+  const CATALOG = [
+    { id:"ck1", nombre:"Cheesecake de chocolate", precio: 6200, cat:"tortas",   img:"https://source.unsplash.com/DOWsiEekKIA" },
+    { id:"ck2", nombre:"Selección de helados",    precio: 3800, cat:"helados",  img:"https://source.unsplash.com/Wpg3Qm0zaGk" },
+    { id:"ck3", nombre:"Cono con granas",         precio: 1800, cat:"helados",  img:"https://source.unsplash.com/3D0HUHFcRrk" },
+    { id:"ck4", nombre:"Cheesecake de cereza",    precio: 5900, cat:"tortas",   img:"https://source.unsplash.com/YLMjArY4048" },
+    { id:"ck5", nombre:"Pastelitos azucarados",   precio: 2400, cat:"pasteleria", img:"https://source.unsplash.com/R3RwPzTakCU" },
+    { id:"ck6", nombre:"Trilogía helada",         precio: 4100, cat:"helados",  img:"https://source.unsplash.com/_Gmyge1Sais" },
+    { id:"ck7", nombre:"Cheesecake rosa",         precio: 6000, cat:"tortas",   img:"https://source.unsplash.com/FDYbS43jUrU" },
+    { id:"ck8", nombre:"Cheesecake clásico",      precio: 5700, cat:"tortas",   img:"https://source.unsplash.com/vx4UkYTzl0w" }
+  ];
+
+  const state = { q:"", cat:"all", sort:"reco", cart:new Map() };
+
+  const $grid = document.getElementById('grid');
+  const $q = document.getElementById('q');
+  const $sort = document.getElementById('sort');
+  const $waBtn = document.getElementById('waBtn');
+  const $cartCount = document.getElementById('cartCount');
+
+  render();
+
+  // Filtros / búsqueda / orden
+  document.querySelectorAll('.filters .btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filters .btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.cat = btn.dataset.cat;
+      render();
+    });
+  });
+  $q.addEventListener('input', () => { state.q = $q.value.trim().toLowerCase(); render(); });
+  $sort.addEventListener('change', () => { state.sort = $sort.value; render(); });
+
+  // WhatsApp
+  $waBtn.addEventListener('click', () => {
+    if(!state.cart.size){
+      alert('Tu carrito está vacío. Elegí al menos un postre.');
+      return;
+    }
+    const items = [...state.cart.values()].map(i => `• ${i.nombre} x${i.qty} — $${(i.precio*i.qty).toLocaleString('es-AR')}`);
+    const total = [...state.cart.values()].reduce((a,i)=>a+i.precio*i.qty,0);
+    const msg = `Hola, quiero hacer este pedido:%0A%0A${items.join('%0A')}` +
+                `%0A%0ATotal: $${total.toLocaleString('es-AR')}`;
+    const phone = '1154815519'; // ← reemplazá por tu número (sin +)
+    window.open(`https://wa.me/${phone}?text=${msg}`,'_blank');
+  });
+
+  // Render
+  function render(){
+    const list = CATALOG
+      .filter(p => state.cat==='all' ? true : p.cat===state.cat)
+      .filter(p => state.q ? p.nombre.toLowerCase().includes(state.q) : true)
+      .sort((a,b) => {
+        switch(state.sort){
+          case 'asc': return a.precio - b.precio;
+          case 'desc': return b.precio - a.precio;
+          case 'az': return a.nombre.localeCompare(b.nombre,'es');
+          default: return 0;
+        }
+      });
+
+    $grid.innerHTML = '';
+    if(!list.length){
+      $grid.innerHTML = `<div class="empty">No encontramos nada con esos filtros. Probá borrar la búsqueda o cambiar la categoría 🍮</div>`;
+      return;
+    }
+    list.forEach(p => $grid.appendChild(card(p)));
+  }
+
+  function card(p){
+    const el = document.createElement('article');
+    el.className = 'card';
+    el.innerHTML = `
+      <picture><img loading="lazy" alt="${escapeHtml(p.nombre)}" src="${p.img}"/></picture>
+      <div class="body">
+        <h3 class="title">${escapeHtml(p.nombre)}</h3>
+        <div class="meta">
+          <span class="price">$${p.precio.toLocaleString('es-AR')}</span>
+          <span>${prettyCat(p.cat)}</span>
+        </div>
+        <div class="tags">
+          <span class="chip">Sin TACC*</span>
+          <span class="chip">Artesanal</span>
+        </div>
+        <div class="actions">
+          <button class="btn add" data-id="${p.id}">Agregar</button>
+          <button class="btn" data-id="${p.id}" data-quick>+1</button>
+        </div>
+      </div>`;
+
+    el.querySelectorAll('button').forEach(b=>{
+      b.addEventListener('click', (ev)=>{
+        const id = ev.currentTarget.dataset.id;
+        addToCart(id, ev.currentTarget.hasAttribute('data-quick'));
+      });
+    });
+    return el;
+  }
+
+  function addToCart(id, quick){
+    const prod = CATALOG.find(x=>x.id===id);
+    if(!prod) return;
+    const cur = state.cart.get(id) || { ...prod, qty:0 };
+    cur.qty += 1;
+    state.cart.set(id, cur);
+    $cartCount.textContent = [...state.cart.values()].reduce((a,i)=>a+i.qty,0);
+    if(!quick) console.log(`${prod.nombre} sumado al carrito. 🍭`);
+  }
+
+  function prettyCat(c){ return c==='tortas' ? 'Torta' : c==='helados' ? 'Helado' : 'Pastelería'; }
+
+  function escapeHtml(s){
+    return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;', "'":'&#39;'}[m]));
+  }
+  </script>
+</body>
+</html>
