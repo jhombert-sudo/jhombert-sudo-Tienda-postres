@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title> Q’bocao</title>
+  <title>🧁Q’Bocao</title>
   <meta name="description" content="Tienda de postres: filtros, sabores, carrito con WhatsApp, envío por distancia y checkout." />
   <style>
     :root{
@@ -20,6 +20,7 @@
     header{position:sticky; top:0; z-index:30; backdrop-filter:saturate(1.2) blur(8px); background:rgba(11,18,32,.7); border-bottom:1px solid var(--border)}
     .wrap{max-width:1100px; margin:auto; padding:18px}
     .brand{display:flex; align-items:center; gap:12px}
+
     .logo{
       width:40px; height:40px; border-radius:12px; display:grid; place-items:center;
       background:radial-gradient(120px 80px at 30% 20%,#38bdf8,transparent),
@@ -27,6 +28,14 @@
       box-shadow:0 6px 30px rgba(243, 246, 248, 0.25);
       position:relative;
     }
+    /* Logo + eslogan */
+    .logo-wrap{
+      display:flex; flex-direction:column; align-items:center; gap:4px; min-width:40px;
+    }
+    .tagline{
+      font-size:10px; line-height:1; color:var(--muted); white-space:nowrap; letter-spacing:.2px; user-select:none;
+    }
+
     /* Pastel del logo girando */
     .logo-emoji{
       display:grid; place-items:center;
@@ -120,8 +129,11 @@
   <header>
     <div class="wrap">
       <div class="brand">
-        <div class="logo"><span class="logo-emoji" aria-hidden>🍰</span></div>
-        <h1> Q’bocao</h1>
+        <div class="logo-wrap">
+          <div class="logo"><span class="logo-emoji" aria-hidden>🍰</span></div>
+          <span class="tagline">Hecho para tentarte</span>
+        </div>
+        <h1>Q’Bocao</h1>
       </div>
 
       <div class="toolbar">
@@ -179,7 +191,7 @@
 
   <footer>
     <div class="wrap">
-      <span class="brand">JUCA®</span>
+      <span class="brand">Q’bocao</span>
     </div>
   </footer>
 
@@ -515,12 +527,12 @@
   function persistCart(){
     try{
       const plain = [...state.cart.values()].map(i => ({id:i.id, nombre:i.nombre, precio:i.precio, cat:i.cat, img:i.img, sabor:i.sabor, qty:i.qty}));
-      localStorage.setItem('juca_cart_v1', JSON.stringify(plain));
+      localStorage.setItem('qbocao_cart_v1', JSON.stringify(plain));
     }catch(e){}
   }
   function loadCart(){
     try{
-      const raw = localStorage.getItem('juca_cart_v1');
+      const raw = localStorage.getItem('qbocao_cart_v1');
       if(!raw) return;
       const arr = JSON.parse(raw);
       state.cart = new Map(arr.map(i => [i.id+'__'+i.sabor, i]));
@@ -662,11 +674,11 @@
     if(el) el.textContent = msg || '';
   }
   function persistCheckoutDraft(d){
-    try{ localStorage.setItem('juca_checkout_v1', JSON.stringify(d)); }catch(e){}
+    try{ localStorage.setItem('qbocao_checkout_v1', JSON.stringify(d)); }catch(e){}
   }
   function loadCheckoutDraft(){
     try{
-      const raw = localStorage.getItem('juca_checkout_v1');
+      const raw = localStorage.getItem('qbocao_checkout_v1');
       if(!raw) return;
       const d = JSON.parse(raw);
       $nombre.value = d.nombre || '';
@@ -682,7 +694,10 @@
 
   // ——— WhatsApp con pago dentro de "Datos del cliente" ———
   function openWhatsAppWith(d){
-    const items = [...state.cart.values()].map(i => `• ${i.nombre} (${i.sabor}) x${i.qty} — ${money(i.precio*i.qty)}`);
+    const items = [...state.cart.values()]
+      .map(i => `• ${i.nombre} (${i.sabor}) x${i.qty} — ${money(i.precio*i.qty)}`)
+      .join('\n');
+
     const {subtotal, fee, total} = calcTotals();
     const zoneName = CONFIG.ZONES[state.zone]?.name || 'Retiro en local';
 
@@ -694,19 +709,22 @@ CBU: ${CONFIG.PAY.cbu}`;
 
     const esDepto = d.tipo === 'Departamento';
 
-    const datosCliente =
-`Datos del cliente:
-Nombre y apellido: ${d.nombre}
-Localidad: ${d.localidad}
-Calle y altura: ${d.calle} ${d.altura}
-Código postal: ${d.cp}
-Tipo: ${d.tipo}${esDepto ? `\nPiso: ${d.piso}\nDepto: ${d.depto}` : ''}
-Pago: ${pagoLine}${d.indicaciones ? `\nIndicaciones: ${d.indicaciones}` : ''}${d.horario ? `\nHorario preferido: ${d.horario}` : ''}`;
+    const datosCliente = [
+      'Datos del cliente:',
+      `Nombre y apellido: ${d.nombre}`,
+      `Localidad: ${d.localidad}`,
+      `Calle y altura: ${d.calle} ${d.altura}`,
+      `Código postal: ${d.cp}`,
+      `Tipo: ${d.tipo}` + (esDepto ? `\nPiso: ${d.piso}\nDepto: ${d.depto}` : ''),
+      `Pago: ${pagoLine}`,
+      d.indicaciones ? `Indicaciones: ${d.indicaciones}` : '',
+      d.horario ? `Horario preferido: ${d.horario}` : ''
+    ].filter(Boolean).join('\n');
 
     const msg =
 `Hola, quiero hacer este pedido:
 
-${items.join('\n')}
+${items}
 
 Envío: ${zoneName} — ${money(fee)}
 Subtotal: ${money(subtotal)}
