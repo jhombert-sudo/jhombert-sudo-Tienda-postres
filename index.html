@@ -6,40 +6,51 @@
   <title>🧁Q’Bocao</title>
   <meta name="description" content="Tienda de postres: filtros, sabores, carrito con WhatsApp, envío por distancia y checkout." />
   <style>
+    /* === Paleta pastel (rosa claro + blanco + negro) === */
     :root{
-      --bg:#0b1220; --card:#edcced; --muted:#d4a5cc;
-      --accent:#7dd3fc; --accent-2:#38bdf8; --white:#f8fafc;
-      --ok:#22c55e; --border:rgba(125,211,252,.18); --danger:#ef4444;
-      --overlay:rgba(11,18,32,.72);
+      --bg:#0e0e11;             /* negro suave */
+      --bg-2:#131318;           /* capa */
+      --card:#16161c;           /* tarjeta negra suave */
+      --ink:#f7f7fb;            /* texto principal (blanco cálido) */
+      --muted:#cfcfe1;          /* texto secundario */
+      --accent:#ffc1d3;         /* rosa claro */
+      --accent-2:#ff95b6;       /* rosa medio */
+      --accent-3:#ff6e9e;       /* rosa intenso (hover) */
+      --ok:#22c55e;
+      --border:rgba(255,193,211,.28); /* borde rosado translúcido */
+      --overlay:rgba(15,15,18,.72);
+      --chip-bg:rgba(255,193,211,.12);
+      --chip-bd:rgba(255,193,211,.35);
     }
     *{box-sizing:border-box}
     body{
-      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
-      background:linear-gradient(180deg,#f1e3ef 0%,#0e1627 60%,#0b1220 100%); color:var(--white); min-height:100svh
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+      color:var(--ink);
+      background:
+        radial-gradient(900px 500px at -10% -20%, rgba(255,193,211,.15), transparent 60%),
+        radial-gradient(600px 420px at 110% -10%, rgba(255,149,182,.12), transparent 60%),
+        linear-gradient(180deg, var(--bg-2) 0%, var(--bg) 60%, #0b0b0f 100%);
+      min-height:100svh;
     }
-    header{position:sticky; top:0; z-index:30; backdrop-filter:saturate(1.2) blur(8px); background:rgba(11,18,32,.7); border-bottom:1px solid var(--border)}
+    header{position:sticky; top:0; z-index:30; backdrop-filter:saturate(1.2) blur(8px); background:rgba(15,15,18,.65); border-bottom:1px solid var(--border)}
     .wrap{max-width:1100px; margin:auto; padding:18px}
     .brand{display:flex; align-items:center; gap:12px}
 
     .logo{
       width:40px; height:40px; border-radius:12px; display:grid; place-items:center;
-      background:radial-gradient(120px 80px at 30% 20%,#38bdf8,transparent),
-                 radial-gradient(120px 80px at 70% 80%,#7dd3fc,transparent);
-      box-shadow:0 6px 30px rgba(243, 246, 248, 0.25);
+      background:
+        radial-gradient(120px 80px at 30% 20%, var(--accent-2), transparent),
+        radial-gradient(120px 80px at 70% 80%, var(--accent), transparent);
+      box-shadow:0 6px 30px rgba(255,193,211,.25);
       position:relative;
     }
-    /* Logo + eslogan */
-    .logo-wrap{
-      display:flex; flex-direction:column; align-items:center; gap:4px; min-width:40px;
-    }
-    .tagline{
-      font-size:10px; line-height:1; color:var(--muted); white-space:nowrap; letter-spacing:.2px; user-select:none;
-    }
+    .logo-wrap{ display:flex; flex-direction:column; align-items:center; gap:4px; min-width:40px; }
+    .tagline{ font-size:10px; line-height:1; color:var(--muted); white-space:nowrap; letter-spacing:.2px; user-select:none; }
 
     /* Pastel del logo girando */
     .logo-emoji{
-      display:grid; place-items:center;
-      font-size:20px;
+      display:grid; place-items:center; font-size:20px;
       transform-origin:50% 55%;
       animation: logo-spin 9s linear infinite;
       will-change: transform;
@@ -49,26 +60,24 @@
     @keyframes logo-spin { to{ transform: rotate(360deg); } }
 
     h1{font-size:clamp(20px,3vw,28px); margin:0}
+
     .toolbar{display:grid; grid-template-columns:auto 1fr; align-items:center; gap:12px; margin-top:14px}
     .filters{display:flex; gap:8px; flex-wrap:wrap}
     .btn,.input,select,textarea{
-      border:1px solid rgba(125,211,252,.25); background:var(--card); color:var(--white);
+      border:1px solid var(--chip-bd); background:var(--card); color:var(--ink);
       padding:10px 12px; border-radius:12px; cursor:pointer; font:inherit
     }
     .input,textarea,select{cursor:text}
-    .btn:hover,select:hover{border-color:var(--accent)}
-    .btn.active{background:linear-gradient(135deg,rgba(56,189,248,.18),rgba(125,211,252,.08)); border-color:var(--accent-2)}
-    .controls{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end}
-    .hint{color:var(--muted); font-size:12px}
-
+    .btn:hover,select:hover{border-color:var(--accent-3)}
+    .btn.active{background:linear-gradient(135deg, rgba(255,149,182,.20), rgba(255,193,211,.10)); border-color:var(--accent-2)}
     .distance{color:var(--muted); font-size:14px; display:flex; gap:8px; align-items:center; flex-wrap:wrap}
     .badge{border:1px solid var(--border); border-radius:999px; padding:6px 10px; background:var(--card)}
 
     main{padding:18px}
     .grid{--min:240px; display:grid; grid-template-columns:repeat(auto-fill,minmax(var(--min),1fr)); gap:16px; max-width:1100px; margin:18px auto}
-    .card{background:var(--card); border:1px solid rgba(125,211,252,.12); border-radius:16px; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 10px 30px rgba(0,0,0,.25); perspective:900px}
+    .card{background:var(--card); border:1px solid rgba(255,193,211,.18); border-radius:16px; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 10px 30px rgba(0,0,0,.25); perspective:900px}
     .card .tilt{transform-style:preserve-3d; transition: transform .25s ease}
-    .card picture{display:block; aspect-ratio:16/11; background:#0b1220; overflow:hidden; border-bottom:1px solid rgba(125,211,252,.12)}
+    .card picture{display:block; aspect-ratio:16/11; background:#0b0b0f; overflow:hidden; border-bottom:1px solid rgba(255,193,211,.18)}
     .card img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .5s ease}
     .card:hover img{transform:scale(1.06)}
     .card .body{padding:14px}
@@ -77,17 +86,17 @@
     .meta{display:flex; justify-content:space-between; align-items:center; color:var(--muted); font-size:14px}
     .price{color:var(--accent-2); font-weight:700}
     .flavors{margin-top:8px; display:flex; gap:6px; flex-wrap:wrap}
-    .chip{font-size:12px; padding:6px 10px; border:1px solid rgba(125,211,252,.25); border-radius:999px; color:var(--muted); background:transparent; cursor:pointer}
-    .chip.active{color:var(--white); background:linear-gradient(135deg,rgba(56,189,248,.22),rgba(125,211,252,.1)); border-color:var(--accent-2)}
+    .chip{font-size:12px; padding:6px 10px; border:1px solid var(--chip-bd); border-radius:999px; color:var(--muted); background:var(--chip-bg); cursor:pointer}
+    .chip.active{color:var(--ink); background:linear-gradient(135deg, rgba(255,149,182,.28), rgba(255,193,211,.12)); border-color:var(--accent-2)}
     .actions{display:flex; gap:8px; margin-top:12px}
     .actions .btn{flex:1}
-    .actions .add{background:linear-gradient(135deg,rgba(56,189,248,.22),rgba(125,211,252,.1)); border-color:var(--accent-2)}
+    .actions .add{background:linear-gradient(135deg, rgba(255,149,182,.28), rgba(255,193,211,.12)); border-color:var(--accent-2)}
 
-    .cart{position:fixed; right:18px; bottom:18px; display:flex; gap:10px; align-items:center; background:linear-gradient(135deg,rgba(56,189,248,.22),rgba(125,211,252,.1)); border:1px solid rgba(125,211,252,.4); padding:10px 14px; border-radius:16px; box-shadow:0 10px 30px rgba(0,0,0,.35); flex-wrap:wrap; z-index:40}
+    .cart{position:fixed; right:18px; bottom:18px; display:flex; gap:10px; align-items:center; background:linear-gradient(135deg, rgba(255,149,182,.22), rgba(255,193,211,.10)); border:1px solid rgba(255,193,211,.40); padding:10px 14px; border-radius:16px; box-shadow:0 10px 30px rgba(0,0,0,.35); flex-wrap:wrap; z-index:40}
     .cart small{color:var(--muted)}
     .cart .count{font-weight:700; color:var(--accent-2)}
     .cart .total{font-weight:700}
-    .wa{background:transparent; border:1px solid var(--ok); color:var(--white); padding:10px 12px; border-radius:12px; cursor:pointer}
+    .wa{background:transparent; border:1px solid var(--ok); color:var(--ink); padding:10px 12px; border-radius:12px; cursor:pointer}
     .wa:hover{background:rgba(34,197,94,.12)}
     .clear{border-color:#ef4444}
     .clear:hover{background:rgba(239,68,68,.12)}
@@ -96,32 +105,29 @@
     footer .wrap{display:flex; justify-content:center; padding:18px}
     footer .brand{font-weight:700; letter-spacing:.5px}
 
-    .empty{grid-column:1/-1; text-align:center; color:var(--muted); padding:30px; border:1px dashed rgba(125,211,252,.25); border-radius:16px}
+    .empty{grid-column:1/-1; text-align:center; color:var(--muted); padding:30px; border:1px dashed var(--chip-bd); border-radius:16px}
 
     /* Modal */
     .modal{position:fixed; inset:0; display:none; place-items:center; z-index:50}
     .modal.open{display:grid}
     .overlay{position:absolute; inset:0; background:var(--overlay); backdrop-filter: blur(5px)}
-    .dialog{position:relative; width:min(720px,92vw); max-height:85vh; overflow:auto; background:var(--card); border:1px solid rgba(125,211,252,.3); border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.5); padding:16px}
+    .dialog{position:relative; width:min(720px,92vw); max-height:85vh; overflow:auto; background:var(--card); border:1px solid var(--chip-bd); border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.5); padding:16px}
     .dialog h3{margin:0 0 8px}
     .dialog .grid2{display:grid; grid-template-columns:1fr 1fr; gap:10px}
     .dialog .grid3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px}
     .row{display:grid; gap:6px}
     label{font-size:12px; color:var(--muted)}
-    .err{color:var(--danger); font-size:12px}
+    .err{color:#ff6b6b; font-size:12px}
     .dialog .bar{display:flex; justify-content:flex-end; gap:8px; padding-top:10px}
-    .x{position:absolute; top:8px; right:8px; border:1px solid rgba(125,211,252,.25); background:transparent; color:var(--white); border-radius:10px; padding:6px 10px; cursor:pointer}
-    .paybox{display:none; border:1px dashed rgba(125,211,252,.35); border-radius:12px; padding:10px; margin-left:auto}
-    .paybox.show{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
-    .copy{border:1px solid rgba(125,211,252,.35); border-radius:10px; padding:6px 10px; background:transparent; color:var(--white); cursor:pointer}
-    .toast{position:fixed; left:50%; bottom:100px; transform:translateX(-50%); background:rgba(0,0,0,.7); color:#fff; padding:8px 12px; border-radius:10px; display:none; z-index:60}
+    .x{position:absolute; top:8px; right:8px; border:1px solid var(--chip-bd); background:transparent; color:var(--ink); border-radius:10px; padding:6px 10px; cursor:pointer}
+    .paybox{border:1px dashed var(--chip-bd); border-radius:12px; padding:10px; display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+    .copy{border:1px solid var(--chip-bd); border-radius:10px; padding:6px 10px; background:transparent; color:var(--ink); cursor:pointer}
 
     /* Mobile */
     @media (max-width: 960px){
       .toolbar{grid-template-columns:1fr}
       .grid{--min:170px}
       .cart{left:12px; right:12px}
-      .controls{justify-content:flex-start}
     }
   </style>
 </head>
@@ -144,22 +150,8 @@
           <button class="btn" data-cat="pasteleria" aria-pressed="false">Pastelería</button>
         </div>
 
-        <!-- Controles: pago + zona + distancia -->
-        <div class="controls" style="gap:10px">
-          <div role="group" aria-label="Método de pago" id="payGroup">
-            <button class="btn pay-btn active" data-pay="efectivo" aria-pressed="true">Efectivo</button>
-            <button class="btn pay-btn" data-pay="transferencia" aria-pressed="false">Transferencia</button>
-          </div>
-
-          <div class="paybox" id="payBox">
-            <span class="hint">Alias: <strong id="aliasText">jhomberthuniel</strong></span>
-            <button class="copy" data-copy="alias">Copiar alias</button>
-            <span class="hint">CBU: <strong id="cbuText">0000003100013610446016</strong></span>
-            <button class="copy" data-copy="cbu">Copiar CBU</button>
-          </div>
-
-          <input class="input" id="cashChange" type="number" min="0" inputmode="numeric" placeholder="¿Llevamos cambio? $0" style="width:160px; display:none" />
-
+        <!-- Solo zona + badges (ya NO hay métodos de pago aquí) -->
+        <div class="filters" style="justify-content:flex-end; gap:10px">
           <select id="zoneSelect" title="Cambiar zona">
             <option value="auto">Zona automática</option>
             <option value="retira">Retiro en local</option>
@@ -191,7 +183,7 @@
 
   <footer>
     <div class="wrap">
-      <span class="brand">Q’bocao</span>
+      <span class="brand">JUCA®</span>
     </div>
   </footer>
 
@@ -256,6 +248,32 @@
         </div>
       </div>
 
+      <!-- MÉTODO DE PAGO (ahora dentro del modal) -->
+      <div class="row">
+        <label>Método de pago *</label>
+        <div style="display:flex; gap:12px; flex-wrap:wrap">
+          <label><input type="radio" name="pago" id="payEfectivo" value="efectivo" checked> Efectivo</label>
+          <label><input type="radio" name="pago" id="payTransfer" value="transferencia"> Transferencia</label>
+        </div>
+      </div>
+
+      <!-- Si eligen efectivo -->
+      <div class="row" id="cashRow">
+        <label for="cashChange">¿Llevamos cambio? (opcional)</label>
+        <input class="input" id="cashChange" type="number" min="0" inputmode="numeric" placeholder="Ej.: 10000" />
+      </div>
+
+      <!-- Si eligen transferencia -->
+      <div class="row" id="transferRow" style="display:none">
+        <label>Datos para transferir</label>
+        <div class="paybox">
+          <span class="hint">Alias: <strong id="aliasText">jhomberthuniel</strong></span>
+          <button class="copy" data-copy="alias">Copiar alias</button>
+          <span class="hint">CBU: <strong id="cbuText">0000003100013610446016</strong></span>
+          <button class="copy" data-copy="cbu">Copiar CBU</button>
+        </div>
+      </div>
+
       <div class="row">
         <label for="indicaciones">Indicaciones para el repartidor (opcional)</label>
         <textarea class="input" id="indicaciones" rows="3" placeholder="Ej.: Timbre roto, llamar al llegar."></textarea>
@@ -309,9 +327,7 @@
     cat:"all",
     cart:new Map(),
     zone:"retira",
-    zoneMode:"auto",
-    pay:"efectivo",
-    cashChange:0
+    zoneMode:"auto"
   };
 
   // ——— Elementos ———
@@ -326,10 +342,6 @@
   const $zoneBadge = document.getElementById('zoneBadge');
   const $feeBadge = document.getElementById('feeBadge');
   const $zoneSelect = document.getElementById('zoneSelect');
-  const $cashChange = document.getElementById('cashChange');
-  const $payBox = document.getElementById('payBox');
-  const $aliasText = document.getElementById('aliasText');
-  const $cbuText = document.getElementById('cbuText');
 
   // Modal
   const $modal = document.getElementById('checkoutModal');
@@ -352,6 +364,13 @@
   const $indicaciones = document.getElementById('indicaciones');
   const $horario = document.getElementById('horario');
 
+  // Pago en modal
+  const $payEfectivo = document.getElementById('payEfectivo');
+  const $payTransfer = document.getElementById('payTransfer');
+  const $cashRow = document.getElementById('cashRow');
+  const $cashChange = document.getElementById('cashChange');
+  const $transferRow = document.getElementById('transferRow');
+
   const $toast = document.getElementById('toast');
 
   // ——— Inicio ———
@@ -360,7 +379,7 @@
   render();
   tryAutoDistance();
   updateTotals();
-  setupPayControls();
+  setupModalPayControls();
   setupTilt();
 
   // ——— Eventos generales ———
@@ -373,7 +392,7 @@
     });
   });
 
-  // Abrir modal en vez de ir directo a WhatsApp
+  // Abrir modal
   $waBtn.addEventListener('click', () => {
     if(!state.cart.size){
       alert('Tu carrito está vacío. Elegí al menos un postre.');
@@ -407,19 +426,13 @@
     }
   });
 
-  // Cambio efectivo
-  $cashChange.addEventListener('input', () => {
-    const n = Number($cashChange.value || 0);
-    state.cashChange = Math.max(0, n);
-  });
-
-  // Copiar alias/CBU
-  document.querySelectorAll('.copy').forEach(btn=>{
-    btn.addEventListener('click', async ()=>{
-      const what = btn.dataset.copy;
-      const text = what==='alias' ? CONFIG.PAY.alias : CONFIG.PAY.cbu;
-      try{ await navigator.clipboard.writeText(text); showToast('Copiado ✅'); }catch(e){ showToast('No se pudo copiar'); }
-    });
+  // Copiar alias/CBU (dentro del modal)
+  document.addEventListener('click', async (e)=>{
+    const btn = e.target.closest('.copy');
+    if(!btn) return;
+    const what = btn.dataset.copy;
+    const text = what==='alias' ? CONFIG.PAY.alias : CONFIG.PAY.cbu;
+    try{ await navigator.clipboard.writeText(text); showToast('Copiado ✅'); }catch(e){ showToast('No se pudo copiar'); }
   });
 
   // Modal interactions
@@ -433,6 +446,9 @@
   $confirmCheckout.addEventListener('click', () => {
     const data = validateCheckout();
     if(!data) return;
+    // Pago elegido en el modal
+    data.pay = $payTransfer.checked ? 'transferencia' : 'efectivo';
+    data.cashChange = Math.max(0, Number($cashChange.value || 0));
     persistCheckoutDraft(data);
     openWhatsAppWith(data);
     closeModal();
@@ -476,7 +492,6 @@
         </div>
       </div>`;
 
-    // Tilt handlers por tarjeta
     const tilt = el.querySelector('.tilt');
     setupTiltFor(tilt);
 
@@ -484,8 +499,7 @@
     el.querySelectorAll('.chip').forEach(ch => {
       ch.addEventListener('click', () => {
         el.querySelectorAll('.chip').forEach(x=>{x.classList.remove('active'); x.setAttribute('aria-pressed','false');});
-        ch.classList.add('active');
-        ch.setAttribute('aria-pressed','true');
+        ch.classList.add('active'); ch.setAttribute('aria-pressed','true');
         selectedFlavor.set(p.id, ch.dataset.flavor);
         el.querySelector('#qty-'+p.id).textContent = getQty(p.id, ch.dataset.flavor) || 0;
       });
@@ -561,31 +575,6 @@
     $zoneBadge.textContent = `Zona: ${CONFIG.ZONES[state.zone]?.name || 'Retiro en local'}`;
   }
 
-  // ——— Pago ———
-  function setupPayControls(){
-    const payBtns = document.querySelectorAll('.pay-btn');
-    payBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        payBtns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
-        btn.classList.add('active'); btn.setAttribute('aria-pressed','true');
-        state.pay = btn.dataset.pay;
-        if(state.pay === 'efectivo'){
-          $cashChange.style.display = '';
-          $payBox.classList.remove('show');
-        }else{
-          $cashChange.style.display = 'none';
-          state.cashChange = 0;
-          $cashChange.value = '';
-          $payBox.classList.add('show');
-        }
-      });
-    });
-    // estado inicial
-    if(state.pay === 'transferencia'){ $payBox.classList.add('show'); }
-    $aliasText.textContent = CONFIG.PAY.alias;
-    $cbuText.textContent = CONFIG.PAY.cbu;
-  }
-
   // ——— Distancia (auto) + zona manual ———
   async function tryAutoDistance(){
     if(state.zoneMode !== 'auto') return;
@@ -611,7 +600,7 @@
   function haversineKm(lat1, lon1, lat2, lon2){
     const R = 6371; const toRad = d => d * Math.PI / 180;
     const dLat = toRad(lat2 - lat1), dLon = toRad(lon2 - lon1);
-    const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
+    const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*math.sin(dLon/2)**2;
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   }
   function getCurrentPosition(opts={}){
@@ -625,6 +614,20 @@
   }
 
   // ——— Modal helpers ———
+  function setupModalPayControls(){
+    const toggle = ()=>{
+      if($payTransfer.checked){
+        $transferRow.style.display = '';
+        $cashRow.style.display = 'none';
+      }else{
+        $transferRow.style.display = 'none';
+        $cashRow.style.display = '';
+      }
+    };
+    $payEfectivo.addEventListener('change', toggle);
+    $payTransfer.addEventListener('change', toggle);
+    toggle(); // estado inicial
+  }
   function openModal(){
     $modal.classList.add('open');
     $modal.setAttribute('aria-hidden','false');
@@ -640,8 +643,7 @@
     $deptoFields.style.display = show ? '' : 'none';
   }
   function validateCheckout(){
-    // limpiar errores
-    ['nombre','localidad','calle','altura','cp','tipo','piso','depto'].forEach(k => setErr(k,''));
+    ['nombre','localidad','calle','altura','cp','piso','depto'].forEach(k => setErr(k,''));
     let ok = true;
 
     const data = {
@@ -661,7 +663,6 @@
     if(!data.localidad){ ok=false; setErr('localidad','Ingresá tu localidad.'); }
     if(!data.calle){ ok=false; setErr('calle','Ingresá la calle.'); }
     if(!/^\d{1,5}$/.test(data.altura)){ ok=false; setErr('altura','Altura inválida.'); }
-    // CP: 4 dígitos o CPA (letra + 4 díg + 3 letras)
     if(!/^\d{4}$/.test(data.cp) && !/^[A-Z]\d{4}[A-Z]{3}$/.test(data.cp)){ ok=false; setErr('cp','Código postal inválido.'); }
     if(data.tipo==='Departamento'){
       if(!data.piso){ ok=false; setErr('piso','Indicá el piso.'); }
@@ -692,7 +693,7 @@
     }catch(e){}
   }
 
-  // ——— WhatsApp con pago dentro de "Datos del cliente" ———
+  // ——— WhatsApp con pago DENTRO de "Datos del cliente" ———
   function openWhatsAppWith(d){
     const items = [...state.cart.values()]
       .map(i => `• ${i.nombre} (${i.sabor}) x${i.qty} — ${money(i.precio*i.qty)}`)
@@ -701,8 +702,8 @@
     const {subtotal, fee, total} = calcTotals();
     const zoneName = CONFIG.ZONES[state.zone]?.name || 'Retiro en local';
 
-    const pagoLine = state.pay === 'efectivo'
-      ? `Efectivo${state.cashChange>0 ? ` (traer cambio de ${money(state.cashChange)})` : ''}`
+    const pagoLine = d.pay === 'efectivo'
+      ? `Efectivo${d.cashChange>0 ? ` (traer cambio de ${money(d.cashChange)})` : ''}`
       : `Transferencia
 Alias: ${CONFIG.PAY.alias}
 CBU: ${CONFIG.PAY.cbu}`;
