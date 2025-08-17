@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tienda de Postres</title>
-  <meta name="description" content="Tienda de postres para GitHub Pages. Búsqueda, filtros y carrito con WhatsApp y envío por distancia." />
+  <title>JUCA® · Postres</title>
+  <meta name="description" content="Tienda de postres: filtros, sabores, carrito con WhatsApp y envío por distancia." />
   <style>
     :root{
       --bg:#0b1220; --card:#121a2b; --muted:#a7b2c7;
@@ -12,26 +12,27 @@
       --ok:#22c55e; --border:rgba(125,211,252,.18);
     }
     *{box-sizing:border-box}
-    body{ margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
-      background:linear-gradient(180deg,#0b1220 0%,#0e1627 60%,#0b1220 100%); color:var(--white); min-height:100svh}
-    header{ position:sticky; top:0; z-index:10; backdrop-filter:saturate(1.2) blur(8px);
-      background:rgba(11,18,32,.7); border-bottom:1px solid var(--border)}
+    body{
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+      background:linear-gradient(180deg,#4163a9 0%,#0e1627 60%,#0b1220 100%); color:var(--white); min-height:100svh
+    }
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(1.2) blur(8px); background:rgba(11,18,32,.7); border-bottom:1px solid var(--border)}
     .wrap{max-width:1100px; margin:auto; padding:18px}
     .brand{display:flex; align-items:center; gap:12px}
     .logo{width:40px; height:40px; border-radius:12px; display:grid; place-items:center;
       background:radial-gradient(120px 80px at 30% 20%,#38bdf8,transparent),
                  radial-gradient(120px 80px at 70% 80%,#7dd3fc,transparent);
-      box-shadow:0 6px 30px rgba(125,211,252,.25)}
+      box-shadow:0 6px 30px rgba(243, 246, 248, 0.25)}
     h1{font-size:clamp(20px,3vw,28px); margin:0}
 
-    .toolbar{display:grid; grid-template-columns:1fr auto auto auto; gap:12px; margin-top:14px}
-    .row{display:flex; gap:8px; flex-wrap:wrap}
-    .search{display:flex; align-items:center; gap:10px; background:var(--card); border:1px solid var(--border); border-radius:14px; padding:10px 12px}
-    .search input{flex:1; background:transparent; border:0; outline:0; color:var(--white); font-size:16px}
-    .btn, .select{border:1px solid rgba(125,211,252,.25); background:var(--card); color:var(--white); padding:10px 12px; border-radius:12px; cursor:pointer}
-    .btn:hover, .select:hover{border-color:var(--accent)}
+    .toolbar{display:grid; grid-template-columns:auto 1fr; align-items:center; gap:12px; margin-top:14px}
+    .filters{display:flex; gap:8px; flex-wrap:wrap}
+    .btn{border:1px solid rgba(125,211,252,.25); background:var(--card); color:var(--white); padding:10px 12px; border-radius:12px; cursor:pointer}
+    .btn:hover{border-color:var(--accent)}
     .btn.active{background:linear-gradient(135deg,rgba(56,189,248,.18),rgba(125,211,252,.08)); border-color:var(--accent-2)}
-    select.select{appearance:none}
+
+    .distance{justify-self:end; color:var(--muted); font-size:14px; display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+    .badge{border:1px solid var(--border); border-radius:999px; padding:6px 10px; background:var(--card)}
 
     main{padding:26px 18px}
     .grid{--min:240px; display:grid; grid-template-columns:repeat(auto-fill,minmax(var(--min),1fr)); gap:16px; max-width:1100px; margin:auto}
@@ -40,15 +41,16 @@
     .card img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .5s ease}
     .card:hover img{transform:scale(1.06)}
     .card .body{padding:14px}
-    .title{font-size:18px; margin:0 0 6px}
+    .title{font-size:18px; margin:0 0 6px; display:flex; justify-content:space-between; align-items:center}
+    .qty-badge{font-size:12px; color:var(--muted); border:1px solid var(--border); padding:2px 8px; border-radius:999px}
     .meta{display:flex; justify-content:space-between; align-items:center; color:var(--muted); font-size:14px}
     .price{color:var(--accent-2); font-weight:700}
-    .tags{margin-top:8px; display:flex; gap:6px; flex-wrap:wrap}
-    .chip{font-size:12px; padding:4px 8px; border:1px solid rgba(125,211,252,.25); border-radius:999px; color:var(--muted)}
+    .flavors{margin-top:8px; display:flex; gap:6px; flex-wrap:wrap}
+    .chip{font-size:12px; padding:6px 10px; border:1px solid rgba(125,211,252,.25); border-radius:999px; color:var(--muted); background:transparent; cursor:pointer}
+    .chip.active{color:var(--white); background:linear-gradient(135deg,rgba(56,189,248,.22),rgba(125,211,252,.1)); border-color:var(--accent-2)}
     .actions{display:flex; gap:8px; margin-top:12px}
     .actions .btn{flex:1}
-    .actions .btn.add{background:linear-gradient(135deg,rgba(56,189,248,.22),rgba(125,211,252,.1)); border-color:var(--accent-2)}
-    .actions .btn.add:hover{transform:translateY(-1px)}
+    .actions .add{background:linear-gradient(135deg,rgba(56,189,248,.22),rgba(125,211,252,.1)); border-color:var(--accent-2)}
 
     .cart{position:fixed; right:18px; bottom:18px; display:flex; gap:10px; align-items:center; background:linear-gradient(135deg,rgba(56,189,248,.22),rgba(125,211,252,.1)); border:1px solid rgba(125,211,252,.4); padding:10px 14px; border-radius:16px; box-shadow:0 10px 30px rgba(0,0,0,.35)}
     .cart small{color:var(--muted)}
@@ -58,9 +60,18 @@
     .wa:hover{background:rgba(34,197,94,.12)}
 
     footer{border-top:1px solid var(--border); margin-top:30px}
-    footer .wrap{display:flex; flex-direction:column; gap:8px}
-    footer a{color:var(--accent)}
+    footer .wrap{display:flex; justify-content:center; padding:18px}
+    footer .brand{font-weight:700; letter-spacing:.5px}
+
     .empty{grid-column:1/-1; text-align:center; color:var(--muted); padding:30px; border:1px dashed rgba(125,211,252,.25); border-radius:16px}
+
+    /* Mobile */
+    @media (max-width: 680px){
+      .toolbar{grid-template-columns:1fr}
+      .distance{justify-self:start}
+      .grid{--min:170px}
+      .cart{left:12px; right:12px; flex-wrap:wrap; gap:6px}
+    }
   </style>
 </head>
 <body>
@@ -68,29 +79,23 @@
     <div class="wrap">
       <div class="brand">
         <div class="logo" aria-hidden>🍰</div>
-        <h1>Postres Deliciosos</h1>
+        <h1>IRIS · Postres</h1>
       </div>
 
       <div class="toolbar">
-        <label class="search" aria-label="Buscar postres">
-          🔎 <input id="q" type="search" placeholder="Buscar (ej.: cheesecake, torta, pastel)…" />
-        </label>
-
         <!-- Filtros (sin Helados) -->
-        <div class="row" role="group" aria-label="Filtros de categoría">
+        <div class="filters" role="group" aria-label="Filtros de categoría">
           <button class="btn active" data-cat="all">Todos</button>
           <button class="btn" data-cat="tortas">Tortas</button>
           <button class="btn" data-cat="pasteleria">Pastelería</button>
         </div>
 
-        <!-- Selector de zona + botón automático -->
-        <select id="zone" class="select" aria-label="Zona de envío">
-          <option value="retira">Retiro en local (sin costo)</option>
-          <option value="z1">Envío 0–3 km</option>
-          <option value="z2">Envío 3–6 km</option>
-          <option value="z3">Envío 6–10 km</option>
-        </select>
-        <button id="autoZone" class="btn" title="Calcular según tu ubicación">Calcular por ubicación</button>
+        <!-- Distancia solo vista -->
+        <div class="distance">
+          <span class="badge" id="distanceBadge">Distancia: —</span>
+          <span class="badge" id="zoneBadge">Zona: Retiro en local</span>
+          <span class="badge" id="feeBadge">Envío: $0</span>
+        </div>
       </div>
     </div>
   </header>
@@ -108,18 +113,16 @@
 
   <footer>
     <div class="wrap">
-      <small>Imágenes desde Unsplash. Cambiá las URLs cuando tengas tus propias fotos.</small>
-      <small>Hecho para GitHub Pages: subí este <code>index.html</code> y activá Pages. 💙</small>
+      <span class="brand">JUCA®</span>
     </div>
   </footer>
 
   <script>
   // ——— Configuración ———
   const CONFIG = {
-    // Coordenadas del LOCAL (tuyas)
-    STORE_LAT: -34.6335848,
+    STORE_LAT: -34.6335848,   // Coordenadas del local (tuyas)
     STORE_LNG: -58.5979308,
-    PHONE: '5491154815519',   // 54 + 9 + área (sin 0) + línea (sin 15). SIN '+'
+    PHONE: '5491154815519',   // 54 + 9 + área (sin 0) + número (sin 15), sin '+'
     CURRENCY: 'ARS',
     ZONES: {
       retira: {name:'Retiro en local', fee:0},
@@ -138,20 +141,25 @@
     { id:"ck5", nombre:"Pastelitos azucarados",   precio: 2400, cat:"pasteleria", img:"https://source.unsplash.com/R3RwPzTakCU" }
   ];
 
-  const state = { q:"", cat:"all", cart:new Map(), zone:"retira" };
+  const FLAVORS = ['chocolate','frutilla'];   // sabores disponibles
+  const selectedFlavor = new Map();           // id -> flavor elegido
+  const state = { cat:"all", cart:new Map(), zone:"retira" };
 
+  // ——— Elementos ———
   const $grid = document.getElementById('grid');
-  const $q = document.getElementById('q');
   const $waBtn = document.getElementById('waBtn');
   const $cartCount = document.getElementById('cartCount');
   const $subTotal = document.getElementById('subTotal');
   const $shipFee = document.getElementById('shipFee');
   const $grandTotal = document.getElementById('grandTotal');
-  const $zone = document.getElementById('zone');
-  const $autoZone = document.getElementById('autoZone');
+  const $distanceBadge = document.getElementById('distanceBadge');
+  const $zoneBadge = document.getElementById('zoneBadge');
+  const $feeBadge = document.getElementById('feeBadge');
 
-  // ——— Render inicial ———
-  render(); updateTotals();
+  // ——— Inicio ———
+  render();
+  tryAutoDistance();
+  updateTotals();
 
   // ——— Eventos ———
   document.querySelectorAll('[data-cat]').forEach(btn => {
@@ -163,37 +171,12 @@
     });
   });
 
-  $q.addEventListener('input', () => { state.q = $q.value.trim().toLowerCase(); render(); });
-
-  $zone.addEventListener('change', () => { state.zone = $zone.value; updateTotals(); });
-
-  $autoZone.addEventListener('click', async () => {
-    try{
-      const pos = await getCurrentPosition({enableHighAccuracy:true, timeout:10000});
-      const km = haversineKm(CONFIG.STORE_LAT, CONFIG.STORE_LNG, pos.coords.latitude, pos.coords.longitude);
-      applyZoneByKm(km);
-      alert(`Estás a ${km.toFixed(1)} km del local. Zona aplicada: ${CONFIG.ZONES[state.zone].name}.`);
-    }catch(e){
-      const txt = prompt('No pudimos obtener tu ubicación automáticamente. Ingresá tus coordenadas como "lat,lon" (ej: -34.60,-58.38):');
-      if(txt){
-        const [lat,lon] = parseCoords(txt);
-        if(Number.isFinite(lat) && Number.isFinite(lon)){
-          const km = haversineKm(CONFIG.STORE_LAT, CONFIG.STORE_LNG, lat, lon);
-          applyZoneByKm(km);
-          alert(`Estás a ${km.toFixed(1)} km del local. Zona aplicada: ${CONFIG.ZONES[state.zone].name}.`);
-        }else{
-          alert('Formato inválido. Usá: -34.60,-58.38');
-        }
-      }
-    }
-  });
-
   $waBtn.addEventListener('click', () => {
     if(!state.cart.size){
       alert('Tu carrito está vacío. Elegí al menos un postre.');
       return;
     }
-    const items = [...state.cart.values()].map(i => `• ${i.nombre} x${i.qty} — ${money(i.precio*i.qty)}`);
+    const items = [...state.cart.values()].map(i => `• ${i.nombre} (${i.sabor}) x${i.qty} — ${money(i.precio*i.qty)}`);
     const {subtotal, fee, total} = calcTotals();
     const zone = CONFIG.ZONES[state.zone]?.name || 'Retiro en local';
     const msg =
@@ -204,82 +187,123 @@
     window.open(`https://wa.me/${CONFIG.PHONE}?text=${msg}`,'_blank');
   });
 
-  // ——— Funciones ———
+  // ——— Renderizado ———
   function render(){
-    const list = CATALOG
-      .filter(p => state.cat==='all' ? true : p.cat===state.cat)
-      .filter(p => state.q ? p.nombre.toLowerCase().includes(state.q) : true);
-
+    const list = CATALOG.filter(p => state.cat==='all' ? true : p.cat===state.cat);
     $grid.innerHTML = '';
     if(!list.length){
-      $grid.innerHTML = `<div class="empty">No encontramos nada con esos filtros. Probá borrar la búsqueda o cambiar la categoría 🍮</div>`;
+      $grid.innerHTML = `<div class="empty">No encontramos nada con esos filtros. Probá cambiar la categoría 🍮</div>`;
       return;
     }
     list.forEach(p => $grid.appendChild(card(p)));
   }
 
   function card(p){
+    if(!selectedFlavor.get(p.id)) selectedFlavor.set(p.id, FLAVORS[0]);
+
     const el = document.createElement('article');
     el.className = 'card';
     el.innerHTML = `
       <picture><img loading="lazy" alt="${escapeHtml(p.nombre)}" src="${p.img}"/></picture>
       <div class="body">
-        <h3 class="title">${escapeHtml(p.nombre)}</h3>
+        <h3 class="title">
+          <span>${escapeHtml(p.nombre)}</span>
+          <span class="qty-badge" id="qty-${p.id}">${getQty(p.id, selectedFlavor.get(p.id)) || 0}</span>
+        </h3>
         <div class="meta">
           <span class="price">${money(p.precio)}</span>
           <span>${prettyCat(p.cat)}</span>
         </div>
-        <div class="tags">
-          <span class="chip">Sin TACC*</span>
-          <span class="chip">Artesanal</span>
+        <div class="flavors" role="group" aria-label="Elegir sabor">
+          ${FLAVORS.map(f => `<button class="chip ${f===selectedFlavor.get(p.id)?'active':''}" data-flavor="${f}">${cap(f)}</button>`).join('')}
         </div>
         <div class="actions">
           <button class="btn add" data-id="${p.id}">Agregar</button>
-          <button class="btn" data-id="${p.id}" data-quick>+1</button>
+          <button class="btn remove" data-id="${p.id}">Quitar</button>
         </div>
       </div>`;
 
-    el.querySelectorAll('button').forEach(b=>{
-      b.addEventListener('click', (ev)=>{
-        const id = ev.currentTarget.dataset.id;
-        addToCart(id, ev.currentTarget.hasAttribute('data-quick'));
+    // sabores
+    el.querySelectorAll('.chip').forEach(ch => {
+      ch.addEventListener('click', () => {
+        el.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+        ch.classList.add('active');
+        selectedFlavor.set(p.id, ch.dataset.flavor);
+        el.querySelector('#qty-'+p.id).textContent = getQty(p.id, ch.dataset.flavor) || 0;
       });
     });
+
+    // agregar / quitar
+    el.querySelector('.add').addEventListener('click', () => {
+      addToCart(p.id, selectedFlavor.get(p.id), +1);
+      el.querySelector('#qty-'+p.id).textContent = getQty(p.id, selectedFlavor.get(p.id));
+    });
+    el.querySelector('.remove').addEventListener('click', () => {
+      addToCart(p.id, selectedFlavor.get(p.id), -1);
+      el.querySelector('#qty-'+p.id).textContent = getQty(p.id, selectedFlavor.get(p.id)) || 0;
+    });
+
     return el;
   }
 
-  function addToCart(id, quick){
+  // ——— Carrito ———
+  function addToCart(id, sabor, delta){
     const prod = CATALOG.find(x=>x.id===id);
-    if(!prod) return;
-    const cur = state.cart.get(id) || { ...prod, qty:0 };
-    cur.qty += 1;
-    state.cart.set(id, cur);
+    if(!prod || !delta) return;
+    const key = id + '__' + sabor;
+    const cur = state.cart.get(key) || { ...prod, sabor, qty:0 };
+    cur.qty += delta;
+    if(cur.qty <= 0){ state.cart.delete(key); }
+    else { state.cart.set(key, cur); }
     $cartCount.textContent = [...state.cart.values()].reduce((a,i)=>a+i.qty,0);
-    if(!quick) console.log(`${prod.nombre} sumado al carrito. 🍭`);
     updateTotals();
   }
-
-  function prettyCat(c){ return c==='tortas' ? 'Torta' : 'Pastelería'; }
-
-  function money(n){
-    return new Intl.NumberFormat('es-AR',{style:'currency',currency:CONFIG.CURRENCY, maximumFractionDigits:0}).format(n);
+  function getQty(id, sabor){
+    const item = state.cart.get(id + '__' + sabor);
+    return item ? item.qty : 0;
   }
 
+  // ——— Utilidades ———
+  function prettyCat(c){ return c==='tortas' ? 'Torta' : 'Pastelería'; }
+  function cap(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+  function money(n){
+    return new Intl.NumberFormat('es-AR',{style:'currency',currency:CONFIG.CURRENCY,maximumFractionDigits:0}).format(n);
+  }
   function calcTotals(){
     const subtotal = [...state.cart.values()].reduce((a,i)=>a+i.precio*i.qty,0);
     const fee = CONFIG.ZONES[state.zone]?.fee || 0;
     const total = subtotal + fee;
     return {subtotal, fee, total};
   }
-
   function updateTotals(){
     const {subtotal, fee, total} = calcTotals();
     $subTotal.textContent = money(subtotal);
     $shipFee.textContent = money(fee);
     $grandTotal.textContent = money(total);
+    $feeBadge.textContent = `Envío: ${money(fee)}`;
+    $zoneBadge.textContent = `Zona: ${CONFIG.ZONES[state.zone]?.name || 'Retiro en local'}`;
   }
 
-  // Haversine: distancia en km entre dos coordenadas
+  // ——— Distancia SOLO vista (automática) ———
+  async function tryAutoDistance(){
+    try{
+      const pos = await getCurrentPosition({enableHighAccuracy:true, timeout:8000});
+      const km = haversineKm(CONFIG.STORE_LAT, CONFIG.STORE_LNG, pos.coords.latitude, pos.coords.longitude);
+      applyZoneByKm(km);
+      $distanceBadge.textContent = `Distancia: ${km.toFixed(1)} km`;
+    }catch(e){
+      $distanceBadge.textContent = 'Distancia: —';
+      state.zone = 'retira';
+      updateTotals();
+    }
+  }
+  function applyZoneByKm(km){
+    if(km < 0.2){ state.zone = 'retira'; }
+    else if(km <= 3){ state.zone = 'z1'; }
+    else if(km <= 6){ state.zone = 'z2'; }
+    else { state.zone = 'z3'; }
+    updateTotals();
+  }
   function haversineKm(lat1, lon1, lat2, lon2){
     const R = 6371; // km
     const toRad = d => d * Math.PI / 180;
@@ -288,29 +312,12 @@
     const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   }
-
-  function applyZoneByKm(km){
-    if(km < 0.2){ state.zone = 'retira'; }      // mismo sitio / muy cerca
-    else if(km <= 3){ state.zone = 'z1'; }
-    else if(km <= 6){ state.zone = 'z2'; }
-    else { state.zone = 'z3'; }                  // >6–10 km (ajustable)
-    $zone.value = state.zone;
-    updateTotals();
-  }
-
-  function parseCoords(text){
-    const parts = (text||'').split(',').map(s=>parseFloat(s.trim()));
-    return [parts[0], parts[1]];
-  }
-
-  // Promesa para geolocalización
   function getCurrentPosition(opts={}){
     return new Promise((res, rej) => {
       if(!('geolocation' in navigator)) return rej(new Error('Geolocalización no disponible'));
       navigator.geolocation.getCurrentPosition(res, rej, opts);
     });
   }
-
   function escapeHtml(s){
     return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;', "'":'&#39;'}[m]));
   }
