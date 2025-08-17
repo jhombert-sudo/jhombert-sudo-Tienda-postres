@@ -6,21 +6,21 @@
   <title>🧁Q’Bocao</title>
   <meta name="description" content="Tienda de postres: filtros, sabores, carrito con WhatsApp, envío por distancia y checkout." />
   <style>
-    /* === Paleta pastel (rosa claro + blanco + negro) === */
+    /* === TEMA: VAINILLA CREMA (claro pastel) === */
     :root{
-      --bg:#0e0e11;             /* negro suave */
-      --bg-2:#131318;           /* capa */
-      --card:#16161c;           /* tarjeta negra suave */
-      --ink:#f7f7fb;            /* texto principal (blanco cálido) */
-      --muted:#cfcfe1;          /* texto secundario */
-      --accent:#ffc1d3;         /* rosa claro */
-      --accent-2:#ff95b6;       /* rosa medio */
-      --accent-3:#ff6e9e;       /* rosa intenso (hover) */
+      --bg:#fffaf3;         /* fondo base crema */
+      --bg-2:#fff2e1;       /* degradado sutil */
+      --card:#ffffff;       /* tarjetas y controles */
+      --ink:#171717;        /* texto principal (negro cálido) */
+      --muted:#6b7280;      /* texto secundario gris suave */
+      --accent:#ffd5e2;     /* rosa claro */
+      --accent-2:#ff9fbf;   /* rosa medio */
+      --accent-3:#ff7aa6;   /* rosa vivo (hover) */
       --ok:#22c55e;
-      --border:rgba(255,193,211,.28); /* borde rosado translúcido */
-      --overlay:rgba(15,15,18,.72);
-      --chip-bg:rgba(255,193,211,.12);
-      --chip-bd:rgba(255,193,211,.35);
+      --border:rgba(255,159,191,.35);
+      --overlay:rgba(255,255,255,.75);
+      --chip-bg:rgba(255,159,191,.08);
+      --chip-bd:rgba(255,159,191,.35);
     }
     *{box-sizing:border-box}
     body{
@@ -28,12 +28,17 @@
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
       color:var(--ink);
       background:
-        radial-gradient(900px 500px at -10% -20%, rgba(255,193,211,.15), transparent 60%),
-        radial-gradient(600px 420px at 110% -10%, rgba(255,149,182,.12), transparent 60%),
-        linear-gradient(180deg, var(--bg-2) 0%, var(--bg) 60%, #0b0b0f 100%);
+        radial-gradient(900px 500px at -10% -20%, rgba(255,159,191,.12), transparent 60%),
+        radial-gradient(600px 420px at 110% -10%, rgba(255,213,226,.18), transparent 60%),
+        linear-gradient(180deg, var(--bg-2) 0%, var(--bg) 60%, #fff 100%);
       min-height:100svh;
     }
-    header{position:sticky; top:0; z-index:30; backdrop-filter:saturate(1.2) blur(8px); background:rgba(15,15,18,.65); border-bottom:1px solid var(--border)}
+    header{
+      position:sticky; top:0; z-index:30;
+      backdrop-filter:saturate(1.2) blur(8px);
+      background:rgba(255,255,255,.70);
+      border-bottom:1px solid var(--border)
+    }
     .wrap{max-width:1100px; margin:auto; padding:18px}
     .brand{display:flex; align-items:center; gap:12px}
 
@@ -42,7 +47,7 @@
       background:
         radial-gradient(120px 80px at 30% 20%, var(--accent-2), transparent),
         radial-gradient(120px 80px at 70% 80%, var(--accent), transparent);
-      box-shadow:0 6px 30px rgba(255,193,211,.25);
+      box-shadow:0 6px 30px rgba(255,159,191,.35);
       position:relative;
     }
     .logo-wrap{ display:flex; flex-direction:column; align-items:center; gap:4px; min-width:40px; }
@@ -75,9 +80,9 @@
 
     main{padding:18px}
     .grid{--min:240px; display:grid; grid-template-columns:repeat(auto-fill,minmax(var(--min),1fr)); gap:16px; max-width:1100px; margin:18px auto}
-    .card{background:var(--card); border:1px solid rgba(255,193,211,.18); border-radius:16px; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 10px 30px rgba(0,0,0,.25); perspective:900px}
+    .card{background:var(--card); border:1px solid rgba(255,159,191,.28); border-radius:16px; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 10px 30px rgba(0,0,0,.08); perspective:900px}
     .card .tilt{transform-style:preserve-3d; transition: transform .25s ease}
-    .card picture{display:block; aspect-ratio:16/11; background:#0b0b0f; overflow:hidden; border-bottom:1px solid rgba(255,193,211,.18)}
+    .card picture{display:block; aspect-ratio:16/11; background:#fafafa; overflow:hidden; border-bottom:1px solid rgba(255,159,191,.28)}
     .card img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .5s ease}
     .card:hover img{transform:scale(1.06)}
     .card .body{padding:14px}
@@ -92,7 +97,7 @@
     .actions .btn{flex:1}
     .actions .add{background:linear-gradient(135deg, rgba(255,149,182,.28), rgba(255,193,211,.12)); border-color:var(--accent-2)}
 
-    .cart{position:fixed; right:18px; bottom:18px; display:flex; gap:10px; align-items:center; background:linear-gradient(135deg, rgba(255,149,182,.22), rgba(255,193,211,.10)); border:1px solid rgba(255,193,211,.40); padding:10px 14px; border-radius:16px; box-shadow:0 10px 30px rgba(0,0,0,.35); flex-wrap:wrap; z-index:40}
+    .cart{position:fixed; right:18px; bottom:18px; display:flex; gap:10px; align-items:center; background:linear-gradient(135deg, rgba(255,149,182,.22), rgba(255,193,211,.10)); border:1px solid rgba(255,159,191,.40); padding:10px 14px; border-radius:16px; box-shadow:0 10px 30px rgba(0,0,0,.12); flex-wrap:wrap; z-index:40}
     .cart small{color:var(--muted)}
     .cart .count{font-weight:700; color:var(--accent-2)}
     .cart .total{font-weight:700}
@@ -111,7 +116,7 @@
     .modal{position:fixed; inset:0; display:none; place-items:center; z-index:50}
     .modal.open{display:grid}
     .overlay{position:absolute; inset:0; background:var(--overlay); backdrop-filter: blur(5px)}
-    .dialog{position:relative; width:min(720px,92vw); max-height:85vh; overflow:auto; background:var(--card); border:1px solid var(--chip-bd); border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.5); padding:16px}
+    .dialog{position:relative; width:min(720px,92vw); max-height:85vh; overflow:auto; background:var(--card); border:1px solid var(--chip-bd); border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.10); padding:16px}
     .dialog h3{margin:0 0 8px}
     .dialog .grid2{display:grid; grid-template-columns:1fr 1fr; gap:10px}
     .dialog .grid3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px}
@@ -122,6 +127,21 @@
     .x{position:absolute; top:8px; right:8px; border:1px solid var(--chip-bd); background:transparent; color:var(--ink); border-radius:10px; padding:6px 10px; cursor:pointer}
     .paybox{border:1px dashed var(--chip-bd); border-radius:12px; padding:10px; display:flex; gap:8px; align-items:center; flex-wrap:wrap}
     .copy{border:1px solid var(--chip-bd); border-radius:10px; padding:6px 10px; background:transparent; color:var(--ink); cursor:pointer}
+
+    /* Toast siempre arriba */
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:calc(env(safe-area-inset-bottom, 0px) + 20px);
+      transform:translateX(-50%);
+      background:rgba(0,0,0,.8);
+      color:#fff;
+      padding:10px 14px;
+      border-radius:10px;
+      display:none;
+      z-index:9999;           /* por encima de todo */
+      pointer-events:none;    /* no bloquea clicks */
+    }
 
     /* Mobile */
     @media (max-width: 960px){
@@ -150,7 +170,7 @@
           <button class="btn" data-cat="pasteleria" aria-pressed="false">Pastelería</button>
         </div>
 
-        <!-- Solo zona + badges (ya NO hay métodos de pago aquí) -->
+        <!-- Zona + badges -->
         <div class="filters" style="justify-content:flex-end; gap:10px">
           <select id="zoneSelect" title="Cambiar zona">
             <option value="auto">Zona automática</option>
@@ -248,7 +268,7 @@
         </div>
       </div>
 
-      <!-- MÉTODO DE PAGO (ahora dentro del modal) -->
+      <!-- MÉTODO DE PAGO (en el modal) -->
       <div class="row">
         <label>Método de pago *</label>
         <div style="display:flex; gap:12px; flex-wrap:wrap">
@@ -377,7 +397,7 @@
   loadCart();
   loadCheckoutDraft();
   render();
-  tryAutoDistance();
+  ensureGeoPermissionThenTry();  // <= geolocalización con manejo de permiso
   updateTotals();
   setupModalPayControls();
   setupTilt();
@@ -417,7 +437,7 @@
     const v = $zoneSelect.value;
     if(v === 'auto'){
       state.zoneMode = 'auto';
-      tryAutoDistance();
+      ensureGeoPermissionThenTry();
     }else{
       state.zoneMode = 'manual';
       state.zone = v;
@@ -575,7 +595,24 @@
     $zoneBadge.textContent = `Zona: ${CONFIG.ZONES[state.zone]?.name || 'Retiro en local'}`;
   }
 
-  // ——— Distancia (auto) + zona manual ———
+  // ——— Distancia (auto) + permiso ———
+  async function ensureGeoPermissionThenTry(){
+    try{
+      if(navigator.permissions && navigator.permissions.query){
+        const perm = await navigator.permissions.query({name:'geolocation'});
+        if(perm.state === 'denied'){
+          $distanceBadge.textContent = 'Distancia: permiso denegado';
+          state.zone = 'retira'; updateTotals();
+          return;
+        }
+        perm.onchange = () => { if(perm.state === 'granted') tryAutoDistance(); };
+      }
+      await tryAutoDistance();
+    }catch(e){
+      $distanceBadge.textContent = 'Distancia: —';
+    }
+  }
+
   async function tryAutoDistance(){
     if(state.zoneMode !== 'auto') return;
     try{
@@ -600,7 +637,7 @@
   function haversineKm(lat1, lon1, lat2, lon2){
     const R = 6371; const toRad = d => d * Math.PI / 180;
     const dLat = toRad(lat2 - lat1), dLon = toRad(lon2 - lon1);
-    const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*math.sin(dLon/2)**2;
+    const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   }
   function getCurrentPosition(opts={}){
@@ -693,7 +730,7 @@
     }catch(e){}
   }
 
-  // ——— WhatsApp con pago DENTRO de "Datos del cliente" ———
+  // ——— WhatsApp con pago dentro de "Datos del cliente" ———
   function openWhatsAppWith(d){
     const items = [...state.cart.values()]
       .map(i => `• ${i.nombre} (${i.sabor}) x${i.qty} — ${money(i.precio*i.qty)}`)
